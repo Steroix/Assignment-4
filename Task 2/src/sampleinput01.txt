@@ -1,0 +1,9 @@
+0: adding shipmentA with deadline 1300 and duration 30
+0: adding shipmentB with deadline 7200 and duration 2300
+0: adding shipmentC with deadline 2359 and duration 300
+0: busy with shipmentA with deadline 1300 and duration 30
+30: done with shipmentA
+30: busy with shipmentC with deadline 2359 and duration 300
+330: done with shipmentC
+330: busy with shipmentB with deadline 7200 and duration 2300
+2400: adding shipmentB with deadline 7200 and duration 230
