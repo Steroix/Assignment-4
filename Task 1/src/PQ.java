@@ -1,27 +1,29 @@
 public class PQ<Key extends Comparable<Key>> {
     private Key[] pq;
     private int N; // Size of the priority queue
+    private boolean isMinHeap; // Flag to determine heap type
 
-    public PQ(int capacity) {
-        pq = (Key[]) new Comparable[capacity + 1]; 
+    public PQ(int capacity, boolean isMinHeap) {
+        pq = (Key[]) new Comparable[capacity + 1];
+        this.isMinHeap = isMinHeap;
     }
-    
-    public PQ() {
-        this(1);
+
+    public PQ(boolean isMinHeap) {
+        this(1, isMinHeap);
     }
-    
 
     public boolean isEmpty() {
         return N == 0;
     }
 
     public void insert(Key key) {
+        if (N == pq.length - 1) resize(2 * pq.length);
         pq[++N] = key;
         swim(N);
     }
 
     private void swim(int k) {
-        while (k > 1 && less(k, k / 2)) {
+        while (k > 1 && compare(k, k / 2)) {
             exch(k, k / 2);
             k = k / 2;
         }
@@ -30,17 +32,15 @@ public class PQ<Key extends Comparable<Key>> {
     private void sink(int k) {
         while (2 * k <= N) {
             int j = 2 * k;
-            if (j < N && less(j + 1, j))
-                j++;
-            if (!less(j, k))
-                break;
+            if (j < N && compare(j + 1, j)) j++;
+            if (!compare(j, k)) break;
             exch(k, j);
             k = j;
         }
     }
 
-    private boolean less(int i, int j) {
-        return pq[i].compareTo(pq[j]) < 0;
+    private boolean compare(int i, int j) {
+        return isMinHeap ? pq[i].compareTo(pq[j]) < 0 : pq[i].compareTo(pq[j]) > 0;
     }
 
     private void exch(int i, int j) {
@@ -49,20 +49,30 @@ public class PQ<Key extends Comparable<Key>> {
         pq[j] = t;
     }
 
-    public Key delMax() {
-        Key max = pq[1];
+    public Key delTop() {
+        if (isEmpty()) throw new RuntimeException("Priority queue underflow");
+        Key top = pq[1];
         exch(1, N--);
         pq[N + 1] = null;
         sink(1);
-        return max;
+        if ((N > 0) && (N == (pq.length - 1) / 4)) resize(pq.length / 2);
+        return top;
     }
 
-    public Key delMin() {
-        Key min = pq[1];
-        exch(1, N--);
-        pq[N + 1] = null;
-        sink(1);
-        return min;
+    private void resize(int capacity) {
+        Key[] temp = (Key[]) new Comparable[capacity];
+        for (int i = 1; i <= N; i++) {
+            temp[i] = pq[i];
+        }
+        pq = temp;
     }
 
+    public Key peek() {
+        if (isEmpty()) throw new RuntimeException("Priority queue underflow");
+        return pq[1];
+    }
+
+    public int size() {
+        return N;
+    }
 }
