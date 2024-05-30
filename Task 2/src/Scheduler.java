@@ -1,5 +1,6 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Scheduler {
     public static long currentTime = 0;
@@ -43,7 +44,9 @@ public class Scheduler {
                 long taskStartTime = currentTime;
                 currentTime += task.getDuration();
                 if (currentTime <= runTime) {
-                    System.out.println(taskStartTime + ": busy with " + task.getName() + " with deadline " + task.getDeadline() + " and duration " + task.getDuration());
+                    System.out.println(taskStartTime + ": busy with " + task.getName() + 
+                                       " with deadline " + task.getDeadline() + 
+                                       " and duration " + task.getDuration());
                     if (currentTime > task.getDeadline()) {
                         System.out.println(currentTime + ": done with " + task.getName() + " (late)");
                     } else {

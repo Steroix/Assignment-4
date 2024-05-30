@@ -10,14 +10,16 @@ public class PriorityQueue {
     public void addTask(Task task) {
         heap.add(task);
         heapifyUp(heap.size() - 1);
-        System.out.println(Scheduler.currentTime + ": adding " + task.getName() + " with deadline " + task.getDeadline() + " and duration " + task.getDuration());
+        System.out.println(Scheduler.currentTime + ": adding " + task.getName() + 
+                           " with deadline " + task.getDeadline() + 
+                           " and duration " + task.getDuration());
     }
 
     public Task removeTask() {
-        if (heap.size() == 0) return null;
+        if (heap.isEmpty()) return null;
         Task removedTask = heap.firstElement();
         Task lastTask = heap.remove(heap.size() - 1);
-        if (heap.size() > 0) {
+        if (!heap.isEmpty()) {
             heap.set(0, lastTask);
             heapifyDown(0);
         }
